@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Estimation Calculator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <section id="login-screen" class="login-screen">
+    <div class="login-card">
+      <form id="login-form" class="login-form">
+        <div class="login-form-copy">
+          <h1>Estimation Calculator</h1>
+        </div>
+
+        <label class="field">
+          <span>Username</span>
+          <input type="text" name="username" placeholder="Enter username" autocomplete="username" required>
+        </label>
+
+        <label class="field">
+          <span>Password</span>
+          <input type="password" name="password" placeholder="Enter password" autocomplete="current-password" required>
+        </label>
+
+        <button type="submit" class="primary-button">Login</button>
+        <p id="login-message" class="login-message" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
+
+  <div id="app-shell" class="app-shell hidden">
+    <header class="topbar">
+      <div>
+        <h1>Test Automation ROI Calculator</h1>
+        <p>Estimate effort and quantify AI productivity gains in real time</p>
+      </div>
+      <div class="topbar-actions">
+        <div class="live-pill">Live Calculation</div>
+        <button id="logout-button" type="button" class="ghost-button">Logout</button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <aside class="sidebar">
+        <form id="estimator-form" class="sidebar-stack">
+          <section class="input-panel">
+            <div class="panel-title">
+              <h2>Project Parameters</h2>
+            </div>
+            <div class="field-stack">
+              <label class="field">
+                <span>Reusability of Test Scripts</span>
+                <div class="input-with-unit">
+                  <input type="number" min="0" max="100" step="0.1" name="reusabilityPercentage">
+                  <em>%</em>
+                </div>
+              </label>
+              <label class="field">
+                <span>Team Size (for per-resource calc)</span>
+                <div class="input-with-unit">
+                  <input type="number" min="1" step="1" name="teamSize">
+                  <em>resource(s)</em>
+                </div>
+              </label>
+              <label class="field">
+                <span>Working Hours per Day</span>
+                <div class="input-with-unit">
+                  <input type="number" min="1" step="0.1" name="hoursPerDay">
+                  <em>hrs / day</em>
+                </div>
+              </label>
+              <label class="field">
+                <span>Working Days per Week</span>
+                <div class="input-with-unit">
+                  <input type="number" min="1" step="0.1" name="daysPerWeek">
+                  <em>days / wk</em>
+                </div>
+              </label>
+              <label class="field">
+                <span>Weeks per Month</span>
+                <div class="input-with-unit">
+                  <input type="number" min="1" step="0.01" name="weeksPerMonth">
+                  <em>wks / mo</em>
+                </div>
+              </label>
+            </div>
+          </section>
+
+          <section class="input-panel">
+            <div class="panel-title">
+              <h2>Script Development</h2>
+            </div>
+            <div class="field-stack">
+              <div id="applications-list"></div>
+              <label class="field">
+                <span>TCs Development - Migration Tool</span>
+                <div class="input-with-unit">
+                  <input type="number" min="0" step="0.01" name="manualTcHours">
+                  <em>hours</em>
+                </div>
+              </label>
+            </div>
+          </section>
+
+          <section class="input-panel">
+            <div class="panel-title">
+              <h2>Test Automation Implementation</h2>
+            </div>
+            <div id="activities-list" class="field-stack"></div>
+          </section>
+
+          <section class="input-panel">
+            <div class="panel-title">
+              <h2>Overheads &amp; AI Advantage</h2>
+            </div>
+            <div class="field-stack">
+              <label class="field">
+                <span>Contingency / Risk</span>
+                <div class="input-with-unit">
+                  <input type="number" min="0" max="100" step="0.1" name="contingencyPercentage">
+                  <em>%</em>
+                </div>
+              </label>
+              <label class="field">
+                <span>Project Management</span>
+                <div class="input-with-unit">
+                  <input type="number" min="0" max="100" step="0.1" name="projectManagementPercentage">
+                  <em>%</em>
+                </div>
+              </label>
+              <label class="field">
+                <span>AI Productivity Advantage (time saved)</span>
+                <div class="input-with-unit">
+                  <input type="number" min="0" max="100" step="0.1" name="aiAdvantagePercentage">
+                  <em>% savings</em>
+                </div>
+              </label>
+            </div>
+          </section>
+        </form>
+      </aside>
+
+      <section class="content">
+        <div id="summary-cards" class="summary-row"></div>
+
+        <section class="card table-card">
+          <div class="card-header table-header">
+            <h2>Detailed Effort Breakdown</h2>
+            <div class="legend">
+              <span><i class="dot subtotal"></i>Subtotal</span>
+              <span><i class="dot ai"></i>AI Effort</span>
+              <span><i class="dot resource"></i>Per Resource</span>
+            </div>
+          </div>
+          <div id="effort-breakdown" class="table-wrap"></div>
+        </section>
+
+        <div class="comparison-grid">
+          <section class="card metric-box red">
+            <h3>Without AI Productivity</h3>
+            <div id="without-ai-metrics" class="metric-list"></div>
+          </section>
+          <section class="card metric-box green">
+            <h3>With AI Productivity Advantage</h3>
+            <div id="with-ai-metrics" class="metric-list"></div>
+          </section>
+        </div>
+
+        <section class="card">
+          <div class="card-header">
+            <h2>Effort Comparison - Visual Overview</h2>
+          </div>
+          <div id="comparison-bars" class="bars"></div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
